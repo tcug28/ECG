@@ -37,7 +37,7 @@ socket.on('room_state', ({ userCount, serverTime }) => {
     timeOffset = serverTime - now;
 
     if (userCount >= 2) {
-        statusText.innerText = `Connected (Users: ${userCount}) - SYNCHRONIZED`;
+        statusText.innerText = "Connected";
         statusText.style.color = '#ffd700';
         renderer.color = '#ffd700';
     } else {
@@ -49,6 +49,18 @@ socket.on('room_state', ({ userCount, serverTime }) => {
 
 socket.on('glow_state', (isActive) => {
     renderer.glowActive = isActive;
+
+    // Only update text if we are actually connected (implied by glow_state)
+    if (isActive) {
+        statusText.innerText = "Hello, we are together";
+        statusText.style.color = '#fff'; // Making it white like the glow
+        statusText.style.textShadow = '0 0 10px #fff';
+    } else {
+        // Revert to standard connected state
+        statusText.innerText = "Connected";
+        statusText.style.color = '#ffd700';
+        statusText.style.textShadow = 'none';
+    }
 });
 
 socket.on('accelerate', ({ duration }) => {
@@ -119,10 +131,23 @@ function onUp(e) {
     }
 }
 
-window.addEventListener('mousedown', onDown);
+window.addEventListener('mousedown', (e) => {
+    // Optional: prevent selection on desktop too if desired
+    // e.preventDefault(); 
+    onDown(e);
+});
 window.addEventListener('mouseup', onUp);
-window.addEventListener('touchstart', (e) => onDown(e.touches[0]));
-window.addEventListener('touchend', onUp);
+
+window.addEventListener('touchstart', (e) => {
+    // Critical for mobile: prevents long-press context menu and scrolling
+    e.preventDefault();
+    onDown(e);
+}, { passive: false });
+
+window.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    onUp(e);
+});
 
 // Animation Loop
 function loop() {
