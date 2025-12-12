@@ -13,7 +13,19 @@ const renderer = new ECGRenderer(canvas);
 // State
 let timeOffset = 0;
 let lastFrameTime = Date.now();
-const socket = io('http://localhost:3000');
+// Auto-detect production vs dev
+// Check if hostname is localhost or local IP
+const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const socketUrl = isDev ? 'http://localhost:3000' : window.location.origin;
+const socket = io(socketUrl, {
+    transports: ['websocket', 'polling'] // Try both
+});
+
+socket.on('connect_error', (err) => {
+    statusText.innerText = `Connection Error: ${err.message}`;
+    statusText.style.color = 'orange';
+    console.error("Socket error:", err);
+});
 
 // Socket Events
 socket.on('connect', () => {
