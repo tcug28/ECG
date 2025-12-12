@@ -1,0 +1,58 @@
+:root {
+    --bg-color: #0d0d0d;
+    --ecg-red: #ff3333;
+    --ecg-gold: #ffd700;
+    --crt-line: rgba(18, 16, 16, 0.1);
+}
+
+body,
+html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-color);
+    overflow: hidden;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#app {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.crt-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%,
+            rgba(0, 0, 0, 0.25) 50%), radial-gradient(circle, rgba(0, 255, 0, 0.03), rgba(0, 0, 0, 0.2));
+    background-size: 100% 4px, 100% 100%;
+    pointer-events: none;
+    z-index: 10;
+    box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.9);
+}
+
+#ui-layer {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: rgba(255, 255, 255, 0.7);
+    z-index: 20;
+    pointer-events: none;
+}
+
+#status-text {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
