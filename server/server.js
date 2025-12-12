@@ -10,8 +10,8 @@ const path = require('path');
 // Serve static files from Vite build (dist)
 app.use(express.static(path.join(__dirname, '../dist')));
 
-// Fallback for SPA (though we don't have routing, it ensures index serves)
-app.get('*', (req, res) => {
+// Fallback for SPA
+app.get(/.*/, (req, res) => {
     res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
